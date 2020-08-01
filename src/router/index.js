@@ -44,12 +44,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const { user } = store.state;
 
-  if (to.meta.requiresAuth) {
-    if (user.isAuth) {
-      next();
-    } else {
-      next("login");
-    }
+  if (to.meta.requiresAuth && !user.isAuth) {
+    next("login");
   } else if (to.name === "Login" && user.isAuth) {
     next("dashboard");
   } else {
