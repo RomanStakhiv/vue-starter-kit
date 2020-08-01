@@ -50,18 +50,11 @@ router.beforeEach((to, from, next) => {
     } else {
       next("login");
     }
-  } else if (to.name === "Login") {
-    if (user.isAuth) {
-      next("dashboard");
-    } else {
-      next();
-    }
+  } else if (to.name === "Login" && user.isAuth) {
+    next("dashboard");
   } else {
     next();
   }
-  console.log("to", to);
-  console.log("from", from);
-  console.log("next", next);
 });
 
 export default router;
