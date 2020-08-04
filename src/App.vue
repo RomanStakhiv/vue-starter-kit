@@ -17,7 +17,7 @@ export default {
   name: "App",
   methods: {
     logout() {
-      store.dispatch("signOut");
+      store.dispatch("logout");
     }
   }
 };
