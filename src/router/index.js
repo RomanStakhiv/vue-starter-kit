@@ -38,15 +38,14 @@ const routes = [
 ];
 
 const router = new VueRouter({
+  mode: "history",
   routes
 });
 
 router.beforeEach((to, from, next) => {
-  const { user } = store.state;
-
-  if (to.meta.requiresAuth && !user.isAuth) {
+  if (to.meta.requiresAuth && !store.state.user) {
     next("login");
-  } else if (to.name === "Login" && user.isAuth) {
+  } else if (to.name === "Login" && store.state.user) {
     next("dashboard");
   } else {
     next();
