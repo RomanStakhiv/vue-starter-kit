@@ -11,16 +11,16 @@
 </template>
 
 <script>
-import store from "./store";
+import store from './store'
 
 export default {
-  name: "App",
+  name: 'App',
   methods: {
     logout() {
-      store.dispatch("logout");
-    }
-  }
-};
+      store.dispatch('logout')
+    },
+  },
+}
 </script>
 
 <style lang="scss">

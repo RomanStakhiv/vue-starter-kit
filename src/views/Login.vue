@@ -1,21 +1,14 @@
 <template>
   <div class="Login">
     <h1>Login</h1>
-    <button @click="login">Login with Google</button>
+    <button @click="$store.dispatch('login')">Login with Google</button>
   </div>
 </template>
 
 <script>
-import store from "../store";
-
 export default {
-  name: "Login",
-  methods: {
-    login() {
-      store.dispatch("login");
-    }
-  }
-};
+  name: 'Login',
+}
 </script>
 
 <style scoped></style>

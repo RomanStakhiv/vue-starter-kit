@@ -7,20 +7,23 @@
 </template>
 
 <script>
-import store from "@/store";
+import api from '@/firebase/api'
 
 export default {
-  name: "Home",
+  name: 'Home',
   components: {},
   data() {
     return {
-      name: "Ivan"
-    };
+      name: 'Ivan',
+    }
   },
   methods: {
     handleClick() {
-      store.dispatch("updateProfile", { name: this.name });
-    }
-  }
-};
+      api({
+        method: 'update',
+        data: { name: this.name },
+      })
+    },
+  },
+}
 </script>
