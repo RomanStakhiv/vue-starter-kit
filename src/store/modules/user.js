@@ -4,6 +4,7 @@ import api from '@/firebase/api'
 
 const state = () => ({
   user: null,
+  usersList: [],
 })
 
 // getters
@@ -14,6 +15,10 @@ const getters = {
 
   getUserEmail(state) {
     return state.user.email
+  },
+
+  usersList(state) {
+    return state.usersList.map(user => user.data())
   },
 }
 
@@ -45,7 +50,7 @@ const actions = {
     api({
       method: 'set',
       data: {
-        name: state.user.displayName,
+        email: state.user.email,
       },
     })
   },
@@ -57,12 +62,24 @@ const actions = {
 
     return resp.data()
   },
+
+  async getUsersList({ commit }) {
+    const resp = await firebase
+      .firestore()
+      .collection('users')
+      .get()
+
+    commit('setUsersList', resp.docs)
+  },
 }
 
 // mutations
 const mutations = {
   setUser(state, user) {
     state.user = user
+  },
+  setUsersList(state, usersList) {
+    state.usersList = usersList
   },
 }
 
