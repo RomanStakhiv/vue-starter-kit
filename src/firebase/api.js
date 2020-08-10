@@ -1,15 +1,14 @@
 import firebase from 'firebase'
 import store from '@/store'
-import { get } from 'lodash'
 
 export default ({
   method = 'set',
-  collection = get(store, 'state.user.email'),
-  doc = 'profile',
-  data,
+  collection = 'users',
+  doc = store.getters['user/getUserEmail'],
+  data = {},
 }) => {
   if (collection) {
-    firebase
+    return firebase
       .firestore()
       .collection(collection)
       .doc(doc)

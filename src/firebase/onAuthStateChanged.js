@@ -4,9 +4,10 @@ import router from '@/router'
 
 export default firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    store.state.user = user
-    router.push('/dashboard')
+    store.commit('user/setUser', user)
+    return router.push('/dashboard')
   } else {
-    store.state.user = null
+    store.commit('user/setUser', null)
+    return router.push('/login')
   }
 })

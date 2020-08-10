@@ -1,55 +1,46 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import store from "@/store";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Home from '../views/Home.vue'
+import store from '@/store'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: Home
+    path: '/',
+    name: 'Home',
+    component: Home,
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    path: '/login',
+    name: 'Login',
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+      import(/* webpackChunkName: "login" */ '../views/Login.vue'),
   },
   {
-    path: "/login",
-    name: "Login",
-    component: () =>
-      import(/* webpackChunkName: "login" */ "../views/Login.vue")
-  },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
+    path: '/dashboard',
+    name: 'Dashboard',
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
     },
     component: () =>
-      import(/* webpackChunkName: "dashboard" */ "../views/Dashboard.vue")
-  }
-];
+      import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
+  },
+]
 
 const router = new VueRouter({
-  mode: "history",
-  routes
-});
+  mode: 'history',
+  routes,
+})
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !store.state.user) {
-    next("login");
-  } else if (to.name === "Login" && store.state.user) {
-    next("dashboard");
+  if (to.meta.requiresAuth && !store.getters['user/getUser']) {
+    next('login')
+  } else if (to.name === 'Login' && store.getters['user/getUser']) {
+    next('dashboard')
   } else {
-    next();
+    next()
   }
-});
+})
 
-export default router;
+export default router

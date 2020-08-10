@@ -14,7 +14,7 @@ export default {
   components: {},
   data() {
     return {
-      name: 'Ivan',
+      name: '',
     }
   },
   methods: {
