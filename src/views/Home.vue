@@ -1,29 +1,23 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <button @click="handleClick">click</button>
-    <input type="text" v-model="name" />
+    <div v-for="user in usersList" :key="user.email">
+      {{ user.email }}
+    </div>
   </div>
 </template>
 
 <script>
-import api from '@/firebase/api'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Home',
-  components: {},
-  data() {
-    return {
-      name: '',
-    }
+  computed: {
+    ...mapGetters({
+      usersList: 'user/usersList',
+    }),
   },
-  methods: {
-    handleClick() {
-      api({
-        method: 'update',
-        data: { name: this.name },
-      })
-    },
+  async mounted() {
+    await this.$store.dispatch('user/getUsersList')
   },
 }
 </script>

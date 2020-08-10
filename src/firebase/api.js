@@ -4,7 +4,7 @@ import store from '@/store'
 export default ({
   method = 'set',
   collection = 'users',
-  doc = store.getters['user/getUserEmail'],
+  doc = store.getters['user/userEmail'],
   data = {},
 }) => {
   if (collection) {

@@ -5,6 +5,16 @@ import api from '@/firebase/api'
 const state = () => ({
   user: null,
   usersList: [],
+  profile: {
+    name: '',
+    surname: '',
+    description: '',
+    age: '',
+    location: '',
+    services: [],
+    experience: '',
+    workingHours: '',
+  },
 })
 
 // getters
@@ -13,12 +23,16 @@ const getters = {
     return state.user
   },
 
-  getUserEmail(state) {
+  userEmail(state) {
     return state.user.email
   },
 
   usersList(state) {
     return state.usersList.map(user => user.data())
+  },
+
+  profileData(state) {
+    return state.profile
   },
 }
 
@@ -31,7 +45,7 @@ const actions = {
       await firebase.auth().signInWithPopup(provider)
 
       // Проверяю ести ли такой пользователь
-      const isExist = await dispatch('getProfileData')
+      const isExist = await dispatch('fetchProfile')
 
       // Если пользователя нет то создаем если есть то ниего не делаем
       if (!isExist) {
@@ -55,12 +69,23 @@ const actions = {
     })
   },
 
-  async getProfileData() {
+  async updateProfile(ctx, data) {
+    console.log('PROFILE ===>', data)
+    api({
+      method: 'update',
+      data,
+    })
+  },
+
+  async fetchProfile({ commit }) {
     const resp = await api({
       method: 'get',
     })
+    const profileData = resp.data()
 
-    return resp.data()
+    commit('setProfile', profileData)
+
+    return profileData
   },
 
   async getUsersList({ commit }) {
@@ -80,6 +105,10 @@ const mutations = {
   },
   setUsersList(state, usersList) {
     state.usersList = usersList
+  },
+
+  setProfile(state, profileData) {
+    state.profile = profileData
   },
 }
 
