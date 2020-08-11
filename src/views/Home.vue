@@ -1,7 +1,9 @@
 <template>
   <div class="home">
-    <div v-for="user in usersList" :key="user.email">
-      {{ user.email }}
+    <div v-for="{ id, name, surname } in usersList" :key="id">
+      <router-link :to="id">
+        {{ name }} <b>{{ surname }}</b>
+      </router-link>
     </div>
   </div>
 </template>

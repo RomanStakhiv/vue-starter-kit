@@ -1,8 +1,8 @@
 <template>
   <div class="Login">
-    <h1>Login</h1>
+    <h1>Войти</h1>
     <button @click="$store.dispatch('user/loginWithGoogle')">
-      Login with Google
+      Google
     </button>
   </div>
 </template>

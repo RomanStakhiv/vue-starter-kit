@@ -1,6 +1,7 @@
 // initial state
 import firebase from 'firebase'
 import api from '@/firebase/api'
+import { v1 as uuid } from 'uuid'
 
 const state = () => ({
   user: null,
@@ -11,7 +12,7 @@ const state = () => ({
     description: '',
     age: '',
     location: '',
-    services: [],
+    services: [{ type: '', price: '', duration: '' }],
     experience: '',
     workingHours: '',
   },
@@ -63,17 +64,14 @@ const actions = {
   createProfile({ state }) {
     api({
       method: 'set',
-      data: {
-        email: state.user.email,
-      },
+      data: { ...state.profile, id: uuid() },
     })
   },
 
-  async updateProfile(ctx, data) {
-    console.log('PROFILE ===>', data)
+  async updateProfile({ state }) {
     api({
       method: 'update',
-      data,
+      data: state.profile,
     })
   },
 
@@ -83,7 +81,7 @@ const actions = {
     })
     const profileData = resp.data()
 
-    commit('setProfile', profileData)
+    commit('updateProfile', profileData)
 
     return profileData
   },
@@ -100,15 +98,20 @@ const actions = {
 
 // mutations
 const mutations = {
-  setUser(state, user) {
-    state.user = user
-  },
-  setUsersList(state, usersList) {
-    state.usersList = usersList
+  setUser(state, data) {
+    state.user = data
   },
 
-  setProfile(state, profileData) {
-    state.profile = profileData
+  setUsersList(state, data) {
+    state.usersList = data
+  },
+
+  updateProfile(state, data) {
+    state.profile = { ...state.profile, ...data }
+  },
+
+  addServiceType(state, data) {
+    state.profile.services.push(data)
   },
 }
 
