@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <div v-for="{ id, name, surname } in usersList" :key="id">
-      <router-link :to="id">
+    <div v-for="{ name, surname, slug } in usersList" :key="slug">
+      <router-link :to="slug">
         {{ name }} <b>{{ surname }}</b>
       </router-link>
     </div>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Home',
@@ -18,8 +18,13 @@ export default {
       usersList: 'user/usersList',
     }),
   },
+  methods: {
+    ...mapActions({
+      fetchDocsList: 'user/fetchDocsList',
+    }),
+  },
   async mounted() {
-    await this.$store.dispatch('user/getUsersList')
+    await this.fetchDocsList()
   },
 }
 </script>

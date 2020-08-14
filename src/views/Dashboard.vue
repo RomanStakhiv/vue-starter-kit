@@ -1,6 +1,5 @@
 <template>
   <div class="Dashboard">
-    <h1>Анкета</h1>
     <form>
       <input type="text" v-model="profile.name" placeholder="name" />
       <input type="text" v-model="profile.surname" placeholder="surname" />
@@ -34,7 +33,9 @@
         <button @click.prevent="add">+</button>
       </div>
       <div>
-        <button @click.prevent="submit">Сохранить и опубликовать</button>
+        <button @click.prevent="submit">
+          {{ $t('message.saveAndPublish') }}
+        </button>
       </div>
     </form>
   </div>

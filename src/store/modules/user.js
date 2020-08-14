@@ -1,11 +1,11 @@
 // initial state
 import firebase from 'firebase'
-import api from '@/firebase/api'
-import { v1 as uuid } from 'uuid'
+import router from '@/router'
 
 const state = () => ({
   user: null,
   usersList: [],
+  fullDoc: {},
   profile: {
     name: '',
     surname: '',
@@ -24,8 +24,8 @@ const getters = {
     return state.user
   },
 
-  userEmail(state) {
-    return state.user.email
+  slug(state) {
+    return state.user.email.substring(0, state.user.email.indexOf('@'))
   },
 
   usersList(state) {
@@ -34,6 +34,10 @@ const getters = {
 
   profileData(state) {
     return state.profile
+  },
+
+  getFullDoc(state) {
+    return state.fullDoc
   },
 }
 
@@ -44,6 +48,7 @@ const actions = {
     try {
       // Авторизация через Google
       await firebase.auth().signInWithPopup(provider)
+      await router.push('dashboard')
 
       // Проверяю ести ли такой пользователь
       const isExist = await dispatch('fetchProfile')
@@ -61,38 +66,54 @@ const actions = {
     firebase.auth().signOut()
   },
 
-  createProfile({ state }) {
-    api({
-      method: 'set',
-      data: { ...state.profile, id: uuid() },
-    })
+  // Создание пользователя
+  async createProfile({ state, getters }) {
+    await firebase
+      .firestore()
+      .collection('users')
+      .doc(getters.slug)
+      .set({ ...state.profile, slug: getters.slug })
   },
 
-  async updateProfile({ state }) {
-    api({
-      method: 'update',
-      data: state.profile,
-    })
+  // Обновление пользовательских данных
+  async updateProfile({ state, getters }) {
+    await firebase
+      .firestore()
+      .collection('users')
+      .doc(getters.slug)
+      .set({ ...state.profile, slug: getters.slug })
   },
 
-  async fetchProfile({ commit }) {
-    const resp = await api({
-      method: 'get',
-    })
-    const profileData = resp.data()
+  // Запрос пользовательских данных
+  async fetchProfile({ commit, getters }) {
+    const doc = await firebase
+      .firestore()
+      .collection('users')
+      .doc(getters.slug)
+      .get()
 
-    commit('updateProfile', profileData)
-
-    return profileData
+    commit('updateProfile', doc.data())
   },
 
-  async getUsersList({ commit }) {
+  // Запрос списка анкет
+  async fetchDocsList({ commit }) {
     const resp = await firebase
       .firestore()
       .collection('users')
       .get()
 
     commit('setUsersList', resp.docs)
+  },
+
+  // Запрос одной анкеты
+  async fetchFullDoc({ commit }, slug) {
+    const doc = await firebase
+      .firestore()
+      .collection('users')
+      .doc(slug)
+      .get()
+
+    commit('setFullDoc', doc.data())
   },
 }
 
@@ -112,6 +133,10 @@ const mutations = {
 
   addServiceType(state, data) {
     state.profile.services.push(data)
+  },
+
+  setFullDoc(state, data) {
+    state.fullDoc = data
   },
 }
 

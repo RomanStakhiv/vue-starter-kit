@@ -1,18 +1,22 @@
 <template>
   <div>
-    <router-link to="/">Массажисты</router-link>
-    <router-link to="login" v-if="!$store.getters['user/getUser']"
-      >Создать анкету</router-link
-    >
-    <router-link to="dashboard" v-if="$store.getters['user/getUser']"
-      >Личный кабинет</router-link
-    >
+    <router-link to="/">{{ $t('message.chooseASpecialist') }}</router-link>
+    <router-link to="login" v-if="!$store.getters['user/getUser']">{{
+      $t('message.createAccount')
+    }}</router-link>
+    <router-link to="dashboard" v-if="$store.getters['user/getUser']">{{
+      $t('message.profile')
+    }}</router-link>
     <button
       v-if="$store.getters['user/getUser']"
       @click="$store.dispatch('user/logout')"
     >
-      Выход
+      {{ $t('message.logout') }}
     </button>
+    <select v-model="$i18n.locale">
+      <option value="ru">RU</option>
+      <option value="en">EN</option>
+    </select>
   </div>
 </template>
 

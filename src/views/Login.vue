@@ -1,6 +1,6 @@
 <template>
   <div class="Login">
-    <h1>Войти</h1>
+    <h1>{{ $t('message.login') }}</h1>
     <button @click="$store.dispatch('user/loginWithGoogle')">
       Google
     </button>
