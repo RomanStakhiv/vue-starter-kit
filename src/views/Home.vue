@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div v-for="{ name, surname, slug } in usersList" :key="slug">
+    <div v-for="{ name, surname, slug } in docsList" :key="slug">
       <router-link :to="slug">
         {{ name }} <b>{{ surname }}</b>
       </router-link>
@@ -15,7 +15,7 @@ export default {
   name: 'Home',
   computed: {
     ...mapGetters({
-      usersList: 'user/usersList',
+      docsList: 'user/docsList',
     }),
   },
   methods: {

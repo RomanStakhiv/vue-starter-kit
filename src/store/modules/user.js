@@ -4,7 +4,7 @@ import router from '@/router'
 
 const state = () => ({
   user: null,
-  usersList: [],
+  docsList: [],
   fullDoc: {},
   profile: {
     name: '',
@@ -28,8 +28,8 @@ const getters = {
     return state.user.email.substring(0, state.user.email.indexOf('@'))
   },
 
-  usersList(state) {
-    return state.usersList.map(user => user.data())
+  docsList(state) {
+    return state.docsList.map(user => user.data())
   },
 
   profileData(state) {
@@ -102,7 +102,7 @@ const actions = {
       .collection('users')
       .get()
 
-    commit('setUsersList', resp.docs)
+    commit('setDocsList', resp.docs)
   },
 
   // Запрос одной анкеты
@@ -123,8 +123,8 @@ const mutations = {
     state.user = data
   },
 
-  setUsersList(state, data) {
-    state.usersList = data
+  setDocsList(state, data) {
+    state.docsList = data
   },
 
   updateProfile(state, data) {
